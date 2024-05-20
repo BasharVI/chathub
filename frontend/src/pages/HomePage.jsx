@@ -135,35 +135,37 @@ function HomePage() {
         <Box mt={3} sx={{ backgroundColor: "#f0f0f0", padding: "20px" }}>
           <Typography variant="h6">Public Groups</Typography>
           <List>
-            {publicGroups.map((group) => (
-              <ListItem
-                key={group._id}
-                components={Link}
-                to={`/group/${group._id}`}
-              >
-                <ListItemText
-                  primary={group.groupName}
-                  secondary={group.description}
-                />
-              </ListItem>
-            ))}
+            {publicGroups &&
+              publicGroups.map((group) => (
+                <ListItem
+                  key={group._id}
+                  components={Link}
+                  to={`/group/${group._id}`}
+                >
+                  <ListItemText
+                    primary={group.groupName}
+                    secondary={group.description}
+                  />
+                </ListItem>
+              ))}
           </List>
         </Box>
         <Box mt={3} sx={{ backgroundColor: "#f0f0f0", padding: "20px" }}>
           <Typography variant="h6">Your Groups</Typography>
           <List>
-            {publicGroups.map((group) => (
-              <ListItem
-                key={group._id}
-                components={Link}
-                to={`/group/${group._id}`}
-              >
-                <ListItemText
-                  primary={group.groupName}
-                  secondary={group.description}
-                />
-              </ListItem>
-            ))}
+            {publicGroups &&
+              publicGroups.map((group) => (
+                <ListItem
+                  key={group._id}
+                  components={Link}
+                  to={`/group/${group._id}`}
+                >
+                  <ListItemText
+                    primary={group.groupName}
+                    secondary={group.description}
+                  />
+                </ListItem>
+              ))}
           </List>
         </Box>
       </Box>

@@ -83,6 +83,19 @@ const leaveGroup = async (req, res) => {
   }
 };
 
+//To get the group created by a particular user
+
+const getCreatedGroup = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const ownGroup = await Group.find({ creatorId: userId });
+    res.status(200).json(ownGroup);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
 // To get all the groups.
 const getAllGroups = async (req, res) => {
   try {
@@ -146,4 +159,5 @@ module.exports = {
   getAllGroups,
   updateGroup,
   deleteGroup,
+  getCreatedGroup,
 };
