@@ -12,9 +12,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
 
 function HomePage() {
   const [publicGroups, setPublicGroups] = useState([]);
+  const [joinedGroups, setJoinedGroups] = useState([]);
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -34,7 +36,13 @@ function HomePage() {
           config
         );
 
+        const joinedGroupResponse = await axios.get(
+          "http://localhost:5000/api/group/joinedGroup",
+          config
+        );
+
         setPublicGroups(publicGroupsResponse.data.allGroups);
+        setJoinedGroups(joinedGroupResponse.data.groups);
       } catch (error) {
         console.error("Error fetching groups:", error);
       }
@@ -67,11 +75,18 @@ function HomePage() {
         groupData,
         config
       );
+      enqueueSnackbar("Group created successfully", { variant: "success" });
       console.log(response);
 
       setGroupName("");
       setGroupDescription("");
       setShowCreateForm(false);
+
+      const joinedGroupResponse = await axios.get(
+        "http://localhost:5000/api/group/joinedGroup",
+        config
+      );
+      setJoinedGroups(joinedGroupResponse.data.groups);
     } catch (error) {
       console.error("Error creating group:", error);
     }
@@ -133,10 +148,10 @@ function HomePage() {
           </form>
         )}
         <Box mt={3} sx={{ backgroundColor: "#f0f0f0", padding: "20px" }}>
-          <Typography variant="h6">Public Groups</Typography>
+          <Typography variant="h6">Your Groups</Typography>
           <List>
-            {publicGroups &&
-              publicGroups.map((group) => (
+            {joinedGroups &&
+              joinedGroups.map((group) => (
                 <ListItem
                   key={group._id}
                   components={Link}
@@ -151,7 +166,7 @@ function HomePage() {
           </List>
         </Box>
         <Box mt={3} sx={{ backgroundColor: "#f0f0f0", padding: "20px" }}>
-          <Typography variant="h6">Your Groups</Typography>
+          <Typography variant="h6">Public Groups</Typography>
           <List>
             {publicGroups &&
               publicGroups.map((group) => (

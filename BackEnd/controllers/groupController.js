@@ -56,6 +56,7 @@ const joinGroup = async (req, res) => {
   }
 };
 
+// Leave a group
 const leaveGroup = async (req, res) => {
   const { groupId } = req.params;
   const userId = req.user._id;
@@ -107,6 +108,19 @@ const getAllGroups = async (req, res) => {
   }
 };
 
+// To get all joined group
+const getJoinedGroup = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const groups = await Group.find({ members: userId });
+    res.status(200).json({ groups });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
+
+// To update the group details
 const updateGroup = async (req, res) => {
   const { groupId } = req.params;
   const { groupName, description } = req.body;
@@ -128,6 +142,7 @@ const updateGroup = async (req, res) => {
   }
 };
 
+// To delete a group
 const deleteGroup = async (req, res) => {
   const { groupId } = req.params;
 
@@ -160,4 +175,5 @@ module.exports = {
   updateGroup,
   deleteGroup,
   getCreatedGroup,
+  getJoinedGroup,
 };
