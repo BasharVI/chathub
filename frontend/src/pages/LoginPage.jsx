@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 function LoginPage({ onLogin }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,8 +24,13 @@ function LoginPage({ onLogin }) {
       localStorage.setItem("token", token);
       localStorage.setItem("user", user);
       onLogin(user, token);
+      enqueueSnackbar("Login successful!", { variant: "success" });
     } catch (error) {
       setError("Invalid credentials");
+      enqueueSnackbar(
+        "Login failed.Please check your credentials and try again",
+        { variant: "error" }
+      );
       console.error("Login error", error);
     }
   };

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useSnackbar } from "notistack";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -8,15 +10,26 @@ function RegisterPage() {
     email: "",
     password: "",
   });
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        formData
+      );
+      enqueueSnackbar(response.data.message, { variant: "success" });
+      navigate("/login");
+    } catch (error) {
+      enqueueSnackbar("user registration failed", { variant: "error" });
+      console.error("User Register failed", error);
+    }
   };
 
   return (

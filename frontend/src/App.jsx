@@ -4,6 +4,7 @@ import Navbar from "./components/NavBar";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,21 +32,31 @@ function App() {
     setIsAuthenticated(false);
     setUsername("");
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
+    enqueueSnackbar("Logout successful!", { variant: "success" });
   };
 
   return (
     <>
-      <Navbar
-        isAuthenticated={isAuthenticated}
-        username={username}
-        onLogout={handleLogout}
-      />
-      <Routes>
-        <Route path="/" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-        <Route path="/home" element={<HomePage username={username} />} />
-      </Routes>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        <Navbar
+          isAuthenticated={isAuthenticated}
+          username={username}
+          onLogout={handleLogout}
+        />
+        <Routes>
+          <Route path="/" element={<RegisterPage />} />
+          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+          <Route path="/home" element={<HomePage username={username} />} />
+        </Routes>
+      </SnackbarProvider>
     </>
   );
 }
