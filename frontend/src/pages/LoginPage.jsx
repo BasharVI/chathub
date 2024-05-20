@@ -1,18 +1,30 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 
-function LoginPage() {
+function LoginPage({ onLogin }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        formData
+      );
+      const { user, token } = response.data;
+      localStorage.setItem("token", token);
+      onLogin(user, token);
+    } catch (error) {
+      setError("Invalid credentials");
+      console.error("Login error", error);
+    }
   };
 
   return (
@@ -40,6 +52,11 @@ function LoginPage() {
             value={formData.password}
             onChange={handleChange}
           />
+          {error && (
+            <Typography color="error" variant="body2">
+              {error}
+            </Typography>
+          )}
           <Box mt={2} textAlign="center">
             <Typography>
               Not a member yet?{" "}

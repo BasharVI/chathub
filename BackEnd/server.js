@@ -11,6 +11,11 @@ const messageRoute = require("./routes/messageRoute");
 
 connectDB();
 const app = express();
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 app.use(express.json());
 

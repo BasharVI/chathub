@@ -1,16 +1,40 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = (user) => {
+    setIsAuthenticated(true);
+    setUsername(user.username);
+    navigate("/home");
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setUsername("");
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <>
-      <Navbar />
+      <Navbar
+        isAuthenticated={isAuthenticated}
+        username={username}
+        onLogout={handleLogout}
+      />
       <Routes>
         <Route path="/" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+        <Route path="/home" element={<HomePage username={username} />} />
       </Routes>
     </>
   );
