@@ -94,4 +94,31 @@ const getAllGroups = async (req, res) => {
   }
 };
 
-module.exports = { createGroup, joinGroup, leaveGroup, getAllGroups };
+const updateGroup = async (req, res) => {
+  const { groupId } = req.params;
+  const { groupName, description } = req.body;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    group.groupName = groupName;
+    group.description = description;
+    await group.save();
+
+    res.status(200).json({ message: "Group updated successfully", group });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+module.exports = {
+  createGroup,
+  joinGroup,
+  leaveGroup,
+  getAllGroups,
+  updateGroup,
+};

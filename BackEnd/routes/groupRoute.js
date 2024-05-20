@@ -11,7 +11,7 @@ router.post("/:groupId/leave", authMiddleware, groupController.leaveGroup);
 
 router.get("/:groupId", groupController.getGroupById);
 
-router.put("/:groupId", groupController.updateGroup);
+router.put("/:groupId", authMiddleware, groupController.updateGroup);
 
 router.delete("/:groupId", groupController.deleteGroup);
 
