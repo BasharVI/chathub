@@ -18,6 +18,7 @@ function App() {
     if (user && token) {
       setIsAuthenticated(true);
       setUsername(user.username);
+      navigate("/home");
     } else {
       navigate("/");
     }
