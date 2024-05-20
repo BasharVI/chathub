@@ -2,7 +2,7 @@ const Group = require("../models/group");
 
 // To Create a new Group
 const createGroup = async (req, res) => {
-  const { groupName } = req.body;
+  const { groupName, description } = req.body;
   const creatorId = req.user._id;
   try {
     const groupExists = await Group.findOne({ groupName });
@@ -13,6 +13,7 @@ const createGroup = async (req, res) => {
     }
     const newGroup = new Group({
       groupName,
+      description,
       creatorId,
       members: [creatorId],
     });
