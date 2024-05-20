@@ -22,7 +22,7 @@ function LoginPage({ onLogin }) {
       );
       const { user, token } = response.data;
       localStorage.setItem("token", token);
-      localStorage.setItem("user", user);
+      localStorage.setItem("user", JSON.stringify(user));
       onLogin(user, token);
       enqueueSnackbar("Login successful!", { variant: "success" });
     } catch (error) {

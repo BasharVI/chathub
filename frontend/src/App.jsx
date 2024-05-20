@@ -4,6 +4,7 @@ import Navbar from "./components/NavBar";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import GroupChatPage from "./pages/groupChatPage";
 import { SnackbarProvider, enqueueSnackbar } from "notistack";
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
           <Route path="/" element={<RegisterPage />} />
           <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
           <Route path="/home" element={<HomePage username={username} />} />
+          <Route path="/group/:groupId" element={<GroupChatPage />} />
         </Routes>
       </SnackbarProvider>
     </>

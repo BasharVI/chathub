@@ -31,7 +31,10 @@ const getMessagesByGroup = async (req, res) => {
   const { groupId } = req.params;
 
   try {
-    const messages = await Message.find({ groupId });
+    const messages = await Message.find({ groupId }).populate(
+      "senderId",
+      "username"
+    );
 
     res.status(200).json(messages);
   } catch (error) {

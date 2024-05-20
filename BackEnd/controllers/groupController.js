@@ -119,6 +119,35 @@ const getJoinedGroup = async (req, res) => {
     res.status(500).json({ error: "Server Error" });
   }
 };
+// To get the group details by id
+
+const getGroupDetails = async (req, res) => {
+  try {
+    const groupId = req.params.groupId;
+    const userId = req.user._id;
+
+    const group = await Group.findById(groupId);
+
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    const memberCount = group.members.length;
+    const isMember = group.members.includes(userId);
+
+    res.status(200).json({
+      groupName: group.groupName,
+      description: group.description,
+      creatorId: group.creatorId,
+      members: group.members,
+      isMember: isMember,
+      memberCount: memberCount,
+    });
+  } catch (error) {
+    console.error("Error fetching group details:", error);
+    res.status(500).json({ error: "Server Error" });
+  }
+};
 
 // To update the group details
 const updateGroup = async (req, res) => {
@@ -176,4 +205,5 @@ module.exports = {
   deleteGroup,
   getCreatedGroup,
   getJoinedGroup,
+  getGroupDetails,
 };

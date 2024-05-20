@@ -154,7 +154,7 @@ function HomePage() {
               joinedGroups.map((group) => (
                 <ListItem
                   key={group._id}
-                  components={Link}
+                  component={Link}
                   to={`/group/${group._id}`}
                 >
                   <ListItemText
@@ -172,7 +172,7 @@ function HomePage() {
               publicGroups.map((group) => (
                 <ListItem
                   key={group._id}
-                  components={Link}
+                  component={Link}
                   to={`/group/${group._id}`}
                 >
                   <ListItemText
