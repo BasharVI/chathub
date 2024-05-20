@@ -20,6 +20,7 @@ function LoginPage({ onLogin }) {
       );
       const { user, token } = response.data;
       localStorage.setItem("token", token);
+      localStorage.setItem("user", user);
       onLogin(user, token);
     } catch (error) {
       setError("Invalid credentials");

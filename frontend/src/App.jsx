@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import RegisterPage from "./pages/RegisterPage";
@@ -10,6 +10,16 @@ function App() {
   const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    if (user && token) {
+      setIsAuthenticated(true);
+      setUsername(user.username);
+    } else {
+      navigate("/");
+    }
+  }, []);
 
   const handleLogin = (user) => {
     setIsAuthenticated(true);

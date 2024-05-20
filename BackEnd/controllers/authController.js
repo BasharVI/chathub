@@ -40,6 +40,7 @@ const login = async (req, res) => {
     });
     const userDetails = {
       username: user.username,
+      userId: user._id,
       email: user.email,
     };
     res.status(200).json({ token, user: userDetails });
