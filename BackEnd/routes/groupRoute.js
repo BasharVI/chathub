@@ -9,10 +9,8 @@ router.get("/", authMiddleware, groupController.getAllGroups);
 router.post("/:groupId/join", authMiddleware, groupController.joinGroup);
 router.post("/:groupId/leave", authMiddleware, groupController.leaveGroup);
 
-router.get("/:groupId", groupController.getGroupById);
-
 router.put("/:groupId", authMiddleware, groupController.updateGroup);
 
-router.delete("/:groupId", groupController.deleteGroup);
+router.delete("/:groupId", authMiddleware, groupController.deleteGroup);
 
 module.exports = router;

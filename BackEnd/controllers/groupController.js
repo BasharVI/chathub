@@ -115,10 +115,35 @@ const updateGroup = async (req, res) => {
   }
 };
 
+const deleteGroup = async (req, res) => {
+  const { groupId } = req.params;
+
+  try {
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (group.creatorId.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to delete this group" });
+    }
+
+    await group.remove();
+
+    res.status(200).json({ message: "Group deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   createGroup,
   joinGroup,
   leaveGroup,
   getAllGroups,
   updateGroup,
+  deleteGroup,
 };
