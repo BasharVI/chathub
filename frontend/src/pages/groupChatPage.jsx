@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Container,
   Box,
@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { enqueueSnackbar } from "notistack";
+import { io } from "socket.io-client";
 
 function GroupChatPage() {
   const { groupId } = useParams();
@@ -21,6 +22,7 @@ function GroupChatPage() {
   const [newMessage, setNewMessage] = useState("");
   const [isMember, setIsMember] = useState(false);
   const navigate = useNavigate();
+  const socketRef = useRef();
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -46,6 +48,17 @@ function GroupChatPage() {
 
     fetchGroupDetails();
     fetchAllMessages();
+
+    socketRef.current = io("http://localhost:5000");
+    socketRef.current.emit("joinGroup", groupId);
+
+    socketRef.current.on("receiveMessage", (message) => {
+      fetchAllMessages();
+    });
+
+    return () => {
+      socketRef.current.disconnect();
+    };
   }, []);
 
   const fetchAllMessages = async (req, res) => {
@@ -127,6 +140,12 @@ function GroupChatPage() {
         messageData,
         config
       );
+      socketRef.current.emit("sendMessage", {
+        groupId,
+        content: newMessage,
+        senderId: currentUser._id,
+      });
+
       if (response) {
         fetchAllMessages();
       }
